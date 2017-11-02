@@ -9,24 +9,29 @@ def collision_free(n, r):
 def collision_free_hash_digits(digits, commits):
   # Ideally xstep = 1 for a smooth graph.  Making it
   # larger speeds the computation (fewer x-points).
-  xstep = 5
+  xstep = commits / 1024
   n = 2 ** (4 * digits)     # 4 bits in a hex digit
   xs = range(2, commits, xstep)
   ys = [100 - collision_free(n, r) * 100 for r in xs]
   return xs, ys
 
 
-commits = 10000
-xs, y4 = collision_free_hash_digits(4, commits)
-xs, y5 = collision_free_hash_digits(5, commits)
+commits = 250000
 xs, y6 = collision_free_hash_digits(6, commits)
 xs, y7 = collision_free_hash_digits(7, commits)
+xs, y8 = collision_free_hash_digits(8, commits)
+xs, y9 = collision_free_hash_digits(9, commits)
+xs, y10 = collision_free_hash_digits(10, commits)
+
 
 from matplotlib import pyplot as plt
 #plt.plot(xs, y4, 'g-', label='4 hex digits')
-plt.plot(xs, y5, 'r-', label='5 hex digits')
 plt.plot(xs, y6, 'b-', label='6 hex digits')
 plt.plot(xs, y7, 'm-', label='7 hex digits')
+plt.plot(xs, y8, 'r-', label='8 hex digits')
+plt.plot(xs, y9, 'm-', label='9 hex digits')
+plt.plot(xs, y10, 'c-', label='10 hex digits')
+
 plt.xlabel('Commits')
 plt.ylabel('Probability (%)')
 plt.grid(True)
@@ -34,4 +39,4 @@ plt.title('Collision Probability')
 # Depending on how the curves are positioned, this
 # can be changed to 'upper left' or 'upper right'.
 plt.legend(loc='upper center')
-plt.show()
+plt.savefig('collisions.png')
